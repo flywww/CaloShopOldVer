@@ -10,10 +10,16 @@
 
 @interface MissionView : UIView
 
-@property (nonatomic,strong) UIImageView* missionPic;
-@property (nonatomic,strong) UILabel* missionLabel;
-@property (nonatomic,strong) NSString* picName;
-@property (nonatomic,strong) NSString* missionDescribe;
+@property (nonatomic) UIImageView* missionPic;
+@property (nonatomic) UILabel* missionDescribeLabel;
+@property (nonatomic) UILabel* missionSubDescribeLabel;
 
-- (instancetype)initWithPic:(NSString*)PicName andDescribe:(NSString*)missionDescribe;
+@property (nonatomic) NSString* picName;
+@property (nonatomic) NSString* missionDescribe;
+@property (nonatomic) NSString* missionSubDescribe;
+
+@property (nonatomic) UIView* circleView;
+
+- (instancetype)initWithPic:(NSString*)PicName andDescribe:(NSString*)missionDescribe andPrice:(NSString*)missionSubDescribe;
+
 @end

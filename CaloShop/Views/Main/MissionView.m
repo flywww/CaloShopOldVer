@@ -7,21 +7,20 @@
 //
 
 #import "MissionView.h"
-//NSString* picFileName;
 @interface MissionView()
 
-@property (nonatomic,strong) UIView* circleView;
 
 
 @end
 @implementation MissionView
 
-- (instancetype)initWithPic:(NSString*)PicName andDescribe:(NSString*)missionDescribe
+- (instancetype)initWithPic:(NSString*)PicName andDescribe:(NSString*)missionDescribe andPrice:(NSString*)missionSubDescribe
 {
     self = [super init];
     if (self)
     {
         self.missionDescribe=missionDescribe;
+        self.missionSubDescribe=missionSubDescribe;
         self.picName=PicName;
         
         [self setupLayout];
@@ -32,101 +31,35 @@
 
 -(void)setupLayout
 {
-    
-    
     [self addSubview:self.circleView];
     [self addSubview:self.missionPic];
-    [self addSubview:self.missionLabel];
-    [self setupConstraints];
-    
+    [self addSubview:self.missionDescribeLabel];
+    [self addSubview:self.missionSubDescribeLabel];
+
 }
 
--(void)setupConstraints
+-(void)updateConstraints
 {
-
+    [super updateConstraints];
     
-    
-    NSDictionary* viewDictionary =@{@"circleView":self.circleView,
-                                    @"missionPic":self.missionPic,
-                                    @"missionLabel":self.missionLabel};
-    
-
-    
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[circleView(87)]"
-                                                                 options:0
-                                                                 metrics:nil
-                                                                   views:viewDictionary]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[missionPic(80)]"
-                                                                 options:0
-                                                                 metrics:nil
-                                                                   views:viewDictionary]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[missionLabel]|"
-                                                                 options:NSLayoutFormatAlignAllCenterY
-                                                                 metrics:nil
-                                                                   views:viewDictionary]];
-    
-    
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[circleView(87)]"
-                                                                 options:0
-                                                                 metrics:nil
-                                                                   views:viewDictionary]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[missionPic(80)]"
-                                                                 options:0
-                                                                 metrics:nil
-                                                                   views:viewDictionary]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[circleView]-(-0.5)-[missionLabel]"
-                                                                 options:0
-                                                                 metrics:nil
-                                                                   views:viewDictionary]];
-     NSLayoutConstraint* xConstraint;
-     xConstraint=[NSLayoutConstraint constraintWithItem:self.circleView
-                                              attribute:NSLayoutAttributeCenterX
-                                              relatedBy:NSLayoutRelationEqual
-                                                 toItem:self
-                                              attribute:NSLayoutAttributeCenterX
-                                             multiplier:1
-                                               constant:0];
-     [self addConstraint:xConstraint];
- 
-     xConstraint=[NSLayoutConstraint constraintWithItem:self.missionPic
-                                              attribute:NSLayoutAttributeCenterX
-                                              relatedBy:NSLayoutRelationEqual
-                                                 toItem:self
-                                              attribute:NSLayoutAttributeCenterX
-                                             multiplier:1
-                                               constant:0];
-     [self addConstraint:xConstraint];
- 
- 
-     NSLayoutConstraint* yConstraint;
-    
-    yConstraint=[NSLayoutConstraint constraintWithItem:self.circleView
-                                             attribute:NSLayoutAttributeCenterY
-                                             relatedBy:NSLayoutRelationEqual
-                                                toItem:self
-                                             attribute:NSLayoutAttributeCenterY
-                                            multiplier:1
-                                              constant:0];
-    [self addConstraint:yConstraint];
-    
-     yConstraint=[NSLayoutConstraint constraintWithItem:self.missionPic
-                                              attribute:NSLayoutAttributeCenterY
-                                              relatedBy:NSLayoutRelationEqual
-                                                 toItem:self
-                                              attribute:NSLayoutAttributeCenterY
-                                             multiplier:1
-                                               constant:0];
-     [self addConstraint:yConstraint];
+    [self.circleView autoSetDimensionsToSize:CGSizeMake(87, 87)];
+    [self.circleView autoCenterInSuperview];
+    [self.missionPic autoSetDimensionsToSize:CGSizeMake(80, 80)];
+    [self.missionPic autoCenterInSuperview];
+    [self.missionDescribeLabel autoAlignAxis:ALAxisVertical toSameAxisOfView:self.circleView];
+    [self.missionDescribeLabel autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.circleView withOffset:0];
+    [self.missionSubDescribeLabel autoAlignAxis:ALAxisVertical toSameAxisOfView:self.circleView];
+    [self.missionSubDescribeLabel autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.missionDescribeLabel withOffset:-3];
 }
+
 
 -(UIView *)circleView
 {
     if (!_circleView)
     {
-        _circleView=[[UIView alloc]init];
+        _circleView=[[UIView alloc]initForAutoLayout];
         _circleView.backgroundColor=[UIColor colorWithHexString:kColorDarkGreen];
         _circleView.layer.cornerRadius=87/2;
-        _circleView.translatesAutoresizingMaskIntoConstraints=NO;
     }
     return _circleView;
 }
@@ -139,26 +72,40 @@
         _missionPic=[[UIImageView alloc]initWithImage:image];
         _missionPic.clipsToBounds=YES;
         _missionPic.layer.cornerRadius=80/2;
-        _missionLabel.translatesAutoresizingMaskIntoConstraints=NO;
+        _missionPic.translatesAutoresizingMaskIntoConstraints=NO;
     }
     return _missionPic;
 }
 
--(UILabel *)missionLabel
+-(UILabel *)missionDescribeLabel
 {
-    if (!_missionLabel)
+    if (!_missionDescribeLabel)
     {
-        _missionLabel=[[UILabel alloc]init];
-        _missionLabel.text=self.missionDescribe;
-        _missionLabel.backgroundColor=[UIColor clearColor];
-        _missionLabel.textColor=[UIColor colorWithHexString:kColorDarkGreen];
-        _missionLabel.font=[UIFont fontWithName:@"HoboStd" size:18];
-        _missionLabel.textAlignment=NSTextAlignmentCenter;
-        [_missionLabel sizeToFit];
-        _missionLabel.translatesAutoresizingMaskIntoConstraints=NO;
+        _missionDescribeLabel=[[UILabel alloc]initForAutoLayout];
+        _missionDescribeLabel.text=self.missionDescribe;
+        _missionDescribeLabel.backgroundColor=[UIColor clearColor];
+        _missionDescribeLabel.textColor=[UIColor colorWithHexString:kColorDarkGreen];
+        _missionDescribeLabel.font=[UIFont fontWithName:@"Helvetica-bold" size:16];
+        _missionDescribeLabel.textAlignment=NSTextAlignmentCenter;
+        //[_missionDescribeLabel sizeToFit];
     }
-    return _missionLabel;
+    return _missionDescribeLabel;
 }
+-(UILabel *)missionSubDescribeLabel
+{
+    if (!_missionSubDescribeLabel)
+    {
+        _missionSubDescribeLabel=[[UILabel alloc]initForAutoLayout];
+        _missionSubDescribeLabel.text=self.missionSubDescribe;
+        _missionSubDescribeLabel.backgroundColor=[UIColor clearColor];
+        _missionSubDescribeLabel.textColor=[UIColor colorWithHexString:kColorDarkRed];
+        _missionSubDescribeLabel.font=[UIFont fontWithName:@"Arial" size:14];
+        _missionSubDescribeLabel.textAlignment=NSTextAlignmentCenter;
+        //[_missionSubDescribeLabel sizeToFit];
+    }
+        return _missionSubDescribeLabel;
+}
+
 
 
 @end
